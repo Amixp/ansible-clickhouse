@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+{{ ansible_managed | comment('xml') }}
+<yandex>
+{% if clickhouse_graphite_rollup is defined %}
+<graphite_rollup>
+{% for tag in clickhouse_graphite_rollup %}
+  <{{ tag['tag'] }}>
+{% if tag['regexp'] is defined %}
+      <regexp>{{ tag['regexp'] }}</regexp>
+{% endif %}
+{% if tag['function'] is defined %}
+      <function>{{ tag['function'] }}</function>
+{% endif %}
+{% for item in tag['retention'] %}
+         <retention>
+            <age>{{ item['age'] }}</age>
+            <precision>{{ item['precision'] }}</precision>
+         </retention>
+{% endfor %}
+  </{{ tag['tag'] }}>
+{% endfor %}
+</graphite_rollup>
+{% endif %}
+</yandex>
+
