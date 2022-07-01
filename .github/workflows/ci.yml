@@ -21,6 +21,8 @@ jobs:
     strategy:
       matrix:
         scenario:
+          - centos_7
+          - centos_8
           - debian_bullseye
           - debian_buster
           - debian_stretch
