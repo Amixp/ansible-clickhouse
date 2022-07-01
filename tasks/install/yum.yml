@@ -8,7 +8,8 @@
     key: "{{ clickhouse_repo_key }}"
   tags: [install]
   become: true
-
+  when: custom_repo == false
+  
 - name: Install by YUM | Ensure clickhouse repo installed
   yum_repository:
     name: clickhouse
@@ -20,6 +21,7 @@
     gpgkey: "{{ clickhouse_repo_key }}"
   tags: [install]
   become: true
+  when: custom_repo == false
 
 - name: Install by YUM | Ensure clickhouse package installed (latest)
   yum:
@@ -28,6 +30,7 @@
   become: true
   tags: [install]
   when: clickhouse_version == 'latest'
+  notify: "Restart Clickhouse Service"
 
 - name: Install by YUM | Ensure clickhouse package installed (version {{ clickhouse_version }})
   yum:
@@ -37,3 +40,5 @@
   become: true
   tags: [install]
   when: clickhouse_version != 'latest'
+  with_items: "{{clickhouse_package}}"
+  notify: "Restart Clickhouse Service"
