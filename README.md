@@ -1,9 +1,9 @@
-ansible-clickhouse 
+ansible-clickhouse
 =========
-![Build Status](https://github.com/alexeysetevoi/ansible-clickhouse/actions/workflows/ci.yml/badge.svg?branch=master)
-[![Build Status](https://travis-ci.org/AlexeySetevoi/ansible-clickhouse.svg?branch=master)](https://travis-ci.org/github/AlexeySetevoi/ansible-clickhouse)
-[![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/alexeysetevoi/ansible-clickhouse)](https://galaxy.ansible.com/alexeysetevoi/clickhouse)
-[![Ansible Galaxy](https://img.shields.io/badge/role-alexeysetevoi.clickhouse-blue.svg)](https://galaxy.ansible.com/alexeysetevoi/clickhouse/)
+![Build Status](https://github.com/Amixp/ansible-clickhouse/actions/workflows/ci.yml/badge.svg?branch=master)
+[![Build Status](https://travis-ci.org/Amixp/ansible-clickhouse.svg?branch=master)](https://travis-ci.org/github/Amixp/ansible-clickhouse)
+[![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/Amixp/ansible-clickhouse)](https://galaxy.ansible.com/Amixp/clickhouse)
+[![Ansible Galaxy](https://img.shields.io/badge/role-Amixp.clickhouse-blue.svg)](https://galaxy.ansible.com/Amixp/clickhouse/)
 
 Simple clickhouse-server deploy and management role.
 Any issues and pr are welcome.
@@ -311,7 +311,7 @@ Including an example of how to use your role (for instance, with variables passe
               - { host: "db_host_2", port: 9000 }
           shard_2:
               - { host: "db_host_3", port: 9000 }
-              - { host: "db_host_4", port: 9000 }       
+              - { host: "db_host_4", port: 9000 }
       clickhouse_zookeeper_nodes:
         - { host: "zoo_host_1", port: 2181 }
         - { host: "zoo_host_2", port: 2181 }
@@ -414,6 +414,6 @@ Author Information
 
 [ClickHouse](https://clickhouse.com/docs/en/index.html) by [ClickHouse, Inc.](https://clickhouse.com/company/).
 
-Role by [AlexeySetevoi](https://github.com/AlexeySetevoi).
+Role by [Amixp](https://github.com/Amixp).
 
 Dear contributors, thank you.
