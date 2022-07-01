@@ -11,11 +11,13 @@ Any issues and pr are welcome.
 Role Variables
 --------------
 F: You can specify a particular version (or `*` for the latest). Please note that downgrade isn't supported.
+
 ```yaml
 clickhouse_version: "19.11.3.11"
 ```
 
 F: You can manage listen ports
+
 ```yaml
 clickhouse_http_port: 8123
 clickhouse_tcp_port: 9000
@@ -49,6 +51,7 @@ clickhouse_profiles_custom:
 ```
 
 Allow any plain k-v. Transform to xml
+
 ```xml
 <profiles>
     <!-- Profiles of settings. -->
@@ -74,6 +77,7 @@ Allow any plain k-v. Transform to xml
 ```
 
 F: You can create custom users:
+
 ```yaml
 clickhouse_users_custom:
       - { name: "testuser",
@@ -118,6 +122,7 @@ Quote object is simple dict:
 
 F: You can create any databases:
 default db state - present
+
 ```yaml
 clickhouse_dbs_custom:
       - { name: testu1 }
@@ -133,6 +138,7 @@ clickhouse_dbs_custom:
 ```
 
 F: You can create dictionary via odbc
+
 ```
 clickhouse_dicts:
           test1:
@@ -166,6 +172,7 @@ clickhouse_dicts:
 ```
 
 F: Flag for remove clickhouse from host(disabled by default)
+
 ```yaml
 clickhouse_remove: no
 ```
@@ -185,6 +192,8 @@ clickhouse_kafka_topics_config:
     retry_backoff_ms: 300
     fetch_min_bytes: 120000
 ```
+
+F: You can manage Merge Tree config. For the list of available parameters, see [MergeTreeSettings.h](https://github.com/yandex/ClickHouse/blob/master/dbms/src/Storages/MergeTree/MergeTreeSettings.h).
 
 F: You can manage [LDAP Server configuration](https://clickhouse.com/docs/en/operations/external-authenticators/ldap/#ldap-server-definition)
 ```yaml
@@ -219,12 +228,22 @@ F: You can manage Merge Tree config. For the list of available parameters, see [
 clickhouse_merge_tree_config:
   max_suspicious_broken_parts: 5
   parts_to_throw_insert: 600
+  parts_to_delay_insert: 300
+  max_delay_to_insert: 2
+```
+
+F: Custom configuration for ClickHouse
+
+```yaml
+clickhouse_custom_config:
+  optimize_throw_if_noop: 1 # Включает генерирование исключения в случаях, когда запрос OPTIMIZE не выполняет мёрж
 ```
 
 Example Playbook
 ----------------
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+
 ```yaml
   - hosts: clickhouse_cluster
     remote_user: root
@@ -302,6 +321,7 @@ Including an example of how to use your role (for instance, with variables passe
 ```
 
 To generate macros: in file host_vars\db_host_1.yml
+
 ```yaml
 clickhouse_macros:
   layer: 01
