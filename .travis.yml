@@ -5,6 +5,11 @@ python: "3.7"
 services:
   - docker
 
+env:
+  global:
+    - ANSIBLE_HOST_KEY_CHECKING=False
+    - VERBOSE_TESTS=1
+
 matrix:
   include:
     - os: linux
@@ -40,6 +45,10 @@ addons:
   apt:
     packages:
     - python3-pip
+
+before_install:
+  # hack! https://github.com/travis-ci/travis-ci/issues/4778
+  - sudo service docker restart ; sleep 10
 
 install:
   - pip install --upgrade pip setuptools && pip install wheel && pip install -r requirements-test.txt
