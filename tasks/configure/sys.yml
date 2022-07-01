@@ -13,6 +13,7 @@
     - "{{ clickhouse_path_data }}"
   notify: restart-ch
   become: true
+  tags: config_sys_main
 
 - name: Config | Create config.d folder
   file:
@@ -22,6 +23,7 @@
     group: "{{ clickhouse_group | default('clickhouse') }}"
     mode: "ug=rwx,o-rwx"
   become: true
+  tags: config_sys_main
 
 - name: Config | Create users.d folder
   file:
@@ -31,6 +33,7 @@
     group: "{{ clickhouse_group | default('clickhouse') }}"
     mode: "ug=rwx,o-rwx"
   become: true
+  tags: config_custom_users
 
 - name: Config | Generate system config
   template:
@@ -41,6 +44,7 @@
     mode: "ug=rw,o-rwx"
   notify: restart-ch
   become: true
+  tags: config_custom_users
 
 - name: Config | Generate users config
   template:
@@ -50,6 +54,7 @@
     group: "{{ clickhouse_group | default('clickhouse') }}"
     mode: "ug=rw,o-rwx"
   become: true
+  tags: config_sys_main
 
 - name: Config | Generate remote_servers config
   template:
@@ -69,9 +74,11 @@
     owner: "{{ clickhouse_user | default('clickhouse') }}"
     group: "{{ clickhouse_group | default('clickhouse') }}"
     mode: "ug=rw,o-rwx"
+    backup: true
   notify: restart-ch
   become: true
-  when: clickhouse_macros is defined 
+  when: clickhouse_macros is defined
+  tags: config_sys_main
 
 - name: Config | Generate zookeeper servers config
   template:
@@ -80,9 +87,11 @@
     owner: "{{ clickhouse_user | default('clickhouse') }}"
     group: "{{ clickhouse_group | default('clickhouse') }}"
     mode: "u=rw,og=r"
+    backup: true
   notify: restart-ch
   become: true
   when: clickhouse_zookeeper_nodes is defined
+  tags: config_sys_main
 
 - name: Config | Fix interserver_http_port and intersever_https_port collision
   lineinfile:
