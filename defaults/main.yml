@@ -1,5 +1,6 @@
 ---
 # defaults file for clickhouse
+custom_repo: false
 
 clickhouse_version: 'latest'
 clickhouse_service_ensure: 'started'
