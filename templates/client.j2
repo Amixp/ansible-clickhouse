@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+{{ ansible_managed | comment('xml') }}
+<yandex>
+    <config-file></config-file>
+    <stacktrace>false</stacktrace>
+    <format>PrettyCompact</format>
+    <format_max_block_size>10000</format_max_block_size>
+    <insert_format_max_block_size>100000</insert_format_max_block_size>
+    <progress>true</progress>
+    <echo>false</echo>
+    <use_client_time_zone>false</use_client_time_zone>
+    <history_file>.clickhouse_history</history_file>
+    <ssl>false</ssl>
+    <host>localhost</host>
+    <port>{{ clickhouse_tcp_port }}</port>
+    <tcp_ssl_port>{{ clickhouse_tcp_secure_port }}</tcp_ssl_port>
+    <tcp_port>{{ clickhouse_tcp_port }}</tcp_port>
+    <database></database>
+    <user></user>
+    <password></password>
+    <compression>false</compression>
+    <connect_timeout>10</connect_timeout>
+    <receive_timeout>10</receive_timeout>
+    <send_timeout>10</send_timeout>
+    <pager></pager>
+    <prompt_by_server_display_name>
+        <default>{display_name} :) </default>
+        <t>{display_name} \x01\e[1;32m\x02:)\x01\e[0m\x02 </t> <!-- if it matched to the substring "test" in the server display name - -->
+        <p>{display_name} \x01\e[1;31m\x02:)\x01\e[0m\x02 </p> <!-- if it matched to the substring "production" in the server display name -->
+    </prompt_by_server_display_name>
+</yandex>

@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+{{ ansible_managed | comment('xml') }}
+<yandex>
+<logger replace="1">
+    <!-- Possible levels: https://github.com/pocoproject/poco/blob/develop/Foundation/include/Poco/Logger.h#L105 -->
+    <level>{{ clickhouse_logger.level }}</level>
+    <log>{{ clickhouse_logger.log }}</log>
+    <errorlog>{{ clickhouse_logger.errorlog }}</errorlog>
+    <size>{{ clickhouse_logger.size }}</size>
+    <count>{{ clickhouse_logger.count }}</count>
+</logger>
+
+<query_log replace="1">
+    <database>system</database>
+    <table>query_log</table>
+    <partition_by>toYYYYMM(event_date)</partition_by>
+    <flush_interval_milliseconds>7500</flush_interval_milliseconds>
+</query_log>
+
+<query_thread_log replace="1">
+    <database>system</database>
+    <table>query_thread_log</table>
+    <partition_by>toYYYYMM(event_date)</partition_by>
+    <flush_interval_milliseconds>7500</flush_interval_milliseconds>
+</query_thread_log>
+
+<part_log replace="1">
+    <database>system</database>
+    <table>part_log</table>
+    <flush_interval_milliseconds>7500</flush_interval_milliseconds>
+</part_log>
+
+<text_log replace="1">
+    <database>system</database>
+    <table>text_log</table>
+    <flush_interval_milliseconds>7500</flush_interval_milliseconds>
+    <level></level>
+</text_log>
+
+<metric_log replace="1">
+    <database>system</database>
+    <table>metric_log</table>
+    <flush_interval_milliseconds>7500</flush_interval_milliseconds>
+    <collect_interval_milliseconds>1000</collect_interval_milliseconds>
+</metric_log>
+
+<asynchronous_metric_log replace="1">
+    <database>system</database>
+    <table>asynchronous_metric_log</table>
+    <!--
+        Asynchronous metrics are updated once a minute, so there is
+        no need to flush more often.
+    -->
+    <flush_interval_milliseconds>60000</flush_interval_milliseconds>
+</asynchronous_metric_log>
+
+<crash_log replace="1">
+    <database>system</database>
+    <table>crash_log</table>
+    <partition_by />
+    <flush_interval_milliseconds>1000</flush_interval_milliseconds>
+</crash_log>
+</yandex>

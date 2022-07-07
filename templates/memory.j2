@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+{{ ansible_managed | comment('xml') }}
+<yandex>
+    <max_server_memory_usage>{{ clickhouse_max_server_memory_usage }}</max_server_memory_usage>
+    <max_server_memory_usage_to_ram_ratio>{{ clickhouse_max_server_memory_usage_to_ram_ratio }}</max_server_memory_usage_to_ram_ratio>
+
+    <total_memory_profiler_step>{{ clickhouse_total_memory_profiler_step }}</total_memory_profiler_step>
+    <total_memory_tracker_sample_probability>{{ clickhouse_total_memory_tracker_sample_probability }}</total_memory_tracker_sample_probability>
+    <uncompressed_cache_size>{{ clickhouse_uncompressed_cache_size }}</uncompressed_cache_size>
+    <mark_cache_size>{{ clickhouse_mark_cache_size }}</mark_cache_size>
+
+{% if clickhouse_merge_tree_config is defined %}
+    <!-- Settings to fine tune MergeTree tables. See documentation in source code, in MergeTreeSettings.h -->
+    <merge_tree>
+    {% for config in clickhouse_merge_tree_config %}
+        <{{ config }}>{{ clickhouse_merge_tree_config[config] }}</{{ config }}>
+    {% endfor %}
+    </merge_tree>
+{% endif %}
+</yandex>

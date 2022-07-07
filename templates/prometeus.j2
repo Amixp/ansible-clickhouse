@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+{{ ansible_managed | comment('xml') }}
+<yandex>
+   <prometheus replace="replace">
+        <endpoint>/metrics</endpoint>
+        <port>{{ clickhouse_prometheus_port }}</port>
+        <metrics>{{ clickhouse_prometheus_metrics }}</metrics>
+        <events>{{ clickhouse_prometheus_metrics }}</events>
+        <asynchronous_metrics>{{ clickhouse_prometheus_metrics }}</asynchronous_metrics>
+        <status_info>true</status_info>
+  </prometheus>
+</yandex>

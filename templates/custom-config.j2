@@ -1,0 +1,120 @@
+#jinja2: trim_blocks: True, lstrip_blocks: True
+<?xml version="1.0"?>
+{{ ansible_managed | comment('xml') }} 
+<yandex replace="1">
+    <http_port>{{ clickhouse_http_port }}</http_port>
+    <tcp_port>{{ clickhouse_tcp_port }}</tcp_port>
+
+    <!-- Port for communication between replicas. Used for data exchange. -->
+    <interserver_http_port>{{ clickhouse_interserver_http_port }}</interserver_http_port>
+{% if clickhouse_interserver_http_host is defined %}
+    <interserver_http_host>{{ clickhouse_interserver_http_host }}</interserver_http_host>
+{% endif %}
+
+{% for host in clickhouse_listen_host %}
+    <listen_host>{{ host }}</listen_host>
+{% endfor %}
+
+    <max_table_size_to_drop>0</max_table_size_to_drop> 
+    <max_partition_size_to_drop>0</max_partition_size_to_drop> 
+
+    <max_connections>{{ clickhouse_config.max_connections }}</max_connections>
+    <keep_alive_timeout>{{ clickhouse_config.keep_alive_timeout }}</keep_alive_timeout>
+    <max_concurrent_queries>{{ clickhouse_config.max_concurrent_queries }}</max_concurrent_queries>
+    <uncompressed_cache_size>{{ clickhouse_config.uncompressed_cache_size }}</uncompressed_cache_size>
+    <mark_cache_size>{{ clickhouse_config.mark_cache_size }}</mark_cache_size>
+
+    <!-- Path to data directory, with trailing slash. -->
+    <path>{{ clickhouse_path_data }}</path>
+
+    <!-- Path to temporary data for processing hard queries. -->
+    <tmp_path>{{ clickhouse_path_tmp }}</tmp_path>
+
+    <!-- Directory with user provided files that are accessible by 'file' table function. -->
+    <user_files_path>{{ clickhouse_path_user_files }}</user_files_path>
+
+    <timezone>Europe/Moscow</timezone>
+
+    <mlock_executable>{{ clickhouse_mlock_status }}</mlock_executable>
+
+    <!-- Reloading interval for embedded dictionaries, in seconds. Default: 3600. -->
+    <builtin_dictionaries_reload_interval>{{ clickhouse_config.builtin_dictionaries_reload_interval }}</builtin_dictionaries_reload_interval>
+
+    <!-- Maximum session timeout, in seconds. Default: 3600. -->
+    <max_session_timeout>{{ clickhouse_config.max_session_timeout }}</max_session_timeout>
+    <shutdown_wait_unfinished>60</shutdown_wait_unfinished>
+    <!-- Default session timeout, in seconds. Default: 60. -->
+    <default_session_timeout>{{ clickhouse_config.default_session_timeout }}</default_session_timeout>
+
+    <default_replica_path>/clickhouse/tables/{uuid}/{shard}/{database}/{table}</default_replica_path>
+    <default_replica_name>{replica}</default_replica_name>
+
+    <!-- Allow to execute distributed DDL queries (CREATE, DROP, ALTER, RENAME) on cluster.
+         Works only if ZooKeeper is enabled. Comment it if such functionality isn't required. -->
+    <distributed_ddl>
+        <!-- Path in ZooKeeper to queue with DDL queries -->
+        <path>/clickhouse/task_queue/ddl</path>
+
+        <!-- Settings from this profile will be used to execute DDL queries -->
+        <!-- <profile>default</profile> -->
+    </distributed_ddl>
+
+    <!-- Protection from accidental DROP.
+         If size of a MergeTree table is greater than max_table_size_to_drop (in bytes) than table could not be dropped with any DROP query.
+         If you want do delete one table and don't want to restart clickhouse-server, you could create special file <clickhouse-path>/flags/force_drop_table and make DROP once.
+         By default max_table_size_to_drop is 50GB; max_table_size_to_drop=0 allows to DROP any tables.
+         The same for max_partition_size_to_drop.
+         Uncomment to disable protection.
+    -->
+    <!-- <max_table_size_to_drop>0</max_table_size_to_drop> -->
+    <!-- <max_partition_size_to_drop>0</max_partition_size_to_drop> -->
+
+    <!-- Directory in <clickhouse-path> containing schema files for various input formats.
+         The directory will be created if it doesn't exist.
+      -->
+    <format_schema_path>{{ clickhouse_path_data }}/format_schemas/</format_schema_path>
+
+{% if clickhouse_kafka_config is defined %}
+    <kafka>
+        {% for config_item in clickhouse_kafka_config %}
+        <{{ config_item }}>{{ clickhouse_kafka_config[config_item] }}</{{ config_item }}>
+        {% endfor %}
+    </kafka>
+{% endif %}
+
+{% for kafka_topic in clickhouse_kafka_topics_config %}
+    <kafka_{{ kafka_topic }}>
+    {% for item in clickhouse_kafka_topics_config[kafka_topic] %}
+        <{{ item }}>{{ clickhouse_kafka_topics_config[kafka_topic][item] }}</{{ item }}>
+    {% endfor %}
+    </kafka_{{ kafka_topic }}>
+{% endfor %}
+
+{% if clickhouse_custom_config is defined %}
+<!-- Settings to fine tune Clickhouse -->
+{% for config_item in clickhouse_custom_config %}
+<{{ config_item }}>
+{% if config_item|d([], true) |length > 0   %}
+  {% for item in clickhouse_custom_config[config_item] %}
+    {{ item }}
+  {% endfor %}
+{% endif %}
+{% if config_item is sequence and (config_item is not string and config_item is not mapping and config_item is not iterable) %} 
+{% for config_sub_item in config_item %}
+    <{{ config_sub_item }}>{{ clickhouse_custom_config[config_item][config_sub_item] }}</{{ config_sub_item }}>
+{% endfor %}
+{% endif %}
+{% if config_item is iterable and (config_item is not string and config_item is not mapping) %} 
+{% for config_sub_item in config_item %}
+    <{{ config_sub_item }}>{{ clickhouse_custom_config[config_item][config_sub_item] }}</{{ config_sub_item }}>
+{% endfor %}
+{% endif %}
+{% if config_item is mapping  and (config_item is not string and config_item is not iterable) %} 
+{% for config_sub_item in config_item %}
+    <{{ config_sub_item }}>{{ clickhouse_custom_config[config_item][config_sub_item] }}</{{ config_sub_item }}>
+{% endfor %}
+{% endif %}
+</{{ config_item }}>
+{% endfor %}
+{% endif %}
+</yandex>
