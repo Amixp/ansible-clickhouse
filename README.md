@@ -394,6 +394,42 @@ which enables
         port: 2181
 ```
 
+Rollup Configuration
+The settings for rollup are defined by the graphite_rollup parameter in the server configuration. The name of the parameter could be any.
+Patterns
+Structure of the patterns section:
+
+pattern
+    rule_type
+    regexp
+    function
+pattern
+    rule_type
+    regexp
+    age + precision
+    ...
+pattern
+    rule_type
+    regexp
+    function
+    age + precision
+    ...
+pattern
+    ...
+default
+    function
+    age + precision
+    ...
+
+### WARNING
+
+Patterns must be strictly ordered:
+
+Patterns without function or retention.
+Patterns with both function and retention.
+Pattern default.
+
+
 F: You can call separately stages(from playbook, external role etc.):
 
 Tag | Action
